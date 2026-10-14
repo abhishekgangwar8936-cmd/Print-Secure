@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { 
   UploadCloud, QrCode, Navigation, FileText, 
   Loader2, ArrowRight, Home, List, User, Settings, MapPin, Store, 
-  X, Check, Plus, Trash2, Sparkles,
+  X, Check, Plus, Trash2,
   Printer, Volume2, VolumeX,
   ChevronRight, Menu
 } from 'lucide-react';
@@ -17,7 +17,7 @@ import ProfileTab from './components/ProfileTab';
 import SettingsTab from './components/SettingsTab';
 import { 
   getShops, getOrders, subscribeToSync, 
-  createOrder, playNotificationSound, generateSampleDocumentUrl 
+  createOrder, playNotificationSound 
 } from './services/storageService';
 
 function UserApp() {
@@ -137,19 +137,6 @@ function UserApp() {
     }
   };
 
-  // Inject realistic sample lecture notes for 1-click test
-  const handleLoadSampleDocument = () => {
-    const sampleDocUrl = generateSampleDocumentUrl('DBMS Lecture Notes Unit-1', 'Relational Models & SQL Queries', 8);
-    const mockFile = {
-      name: 'DBMS_Notes_Unit1.pdf',
-      size: 1048576,
-      type: 'image/svg+xml',
-      dataUrl: sampleDocUrl
-    };
-    setSelectedFiles([mockFile]);
-    setPageCount(8);
-    if (!activeShop) setActiveShop(shops[0]);
-  };
 
   const removeFile = (index) => {
     const updated = selectedFiles.filter((_, i) => i !== index);
@@ -415,25 +402,16 @@ function UserApp() {
                 {/* LEFT COLUMN: ORDER COMPOSER & UPLOAD STATION (7 COLS) */}
                 <div className="lg:col-span-7 space-y-4">
                   
-                  {/* Greeting & Quick Tagline */}
-                  <div className="flex items-center justify-between pb-1">
+                  {/* Desktop Section Header (Clean & Minimal, hidden on mobile for maximum viewport) */}
+                  <div className="hidden sm:flex items-center justify-between pb-1">
                     <div>
-                      <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-                        Print in Seconds, <span className="text-emerald-400">Zero Footprint.</span>
+                      <h1 className="text-xl font-black text-white tracking-tight">
+                        Campus Print Station
                       </h1>
-                      <p className="text-xs text-slate-400 mt-1">
-                        Upload assignments or notes, select a campus shop, get an instant Token ID.
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        Select a counter, upload documents, and collect with Token ID.
                       </p>
                     </div>
-
-                    <button
-                      onClick={handleLoadSampleDocument}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111A2C] hover:bg-[#1A263D] border border-white/5 text-emerald-400 text-xs font-bold transition-all active:scale-95 shadow-sm"
-                      title="Load sample lecture notes to test the pipeline"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Test Sample Notes</span>
-                    </button>
                   </div>
 
                   {/* Active Selected Shop Bar */}
@@ -516,48 +494,36 @@ function UserApp() {
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
-                      className={`w-full py-12 px-6 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-3 text-center cursor-pointer transition-all ${
+                      className={`w-full py-7 sm:py-10 px-4 sm:px-6 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-3 text-center cursor-pointer transition-all ${
                         isDragging 
                           ? 'border-emerald-400 bg-emerald-500/10 scale-[1.01]' 
                           : 'border-white/10 hover:border-emerald-500/40 bg-[#0A111E]/60 hover:bg-[#0A111E]'
                       }`}
                     >
-                      <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-500/10">
-                        {isCalculating ? <Loader2 className="w-7 h-7 animate-spin" /> : <UploadCloud className="w-7 h-7" />}
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-500/10">
+                        {isCalculating ? <Loader2 className="w-6 h-6 sm:w-7 sm:h-7 animate-spin" /> : <UploadCloud className="w-6 h-6 sm:w-7 sm:h-7" />}
                       </div>
 
                       <div>
-                        <p className="text-base font-bold text-white">
-                          Drag & drop documents here, or <span className="text-emerald-400 underline">browse</span>
+                        <p className="text-sm sm:text-base font-bold text-white">
+                          Tap to upload document, or <span className="text-emerald-400 underline">browse</span>
                         </p>
-                        <p className="text-xs text-slate-400 mt-1">
-                          Supports PDF, PNG, JPG files • Automatic page count detection
+                        <p className="text-[11px] sm:text-xs text-slate-400 mt-1">
+                          Supports PDF, PNG, JPG files • Automatic page detection
                         </p>
                       </div>
 
-                      <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                      <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
                         <span className="px-2.5 py-1 rounded-lg bg-white/5 text-[10px] text-slate-300 font-semibold">
-                          📄 PDF Lecture Notes
+                          📄 PDF Documents
                         </span>
                         <span className="px-2.5 py-1 rounded-lg bg-white/5 text-[10px] text-slate-300 font-semibold">
-                          🖼️ High-Res Scans
+                          🖼️ Image Scans
                         </span>
                         <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-[10px] text-emerald-400 font-bold border border-emerald-500/20">
-                          🔒 Zero-Disk Shred Guarantee
+                          🔒 Zero-Disk Shred
                         </span>
                       </div>
-
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLoadSampleDocument();
-                        }}
-                        className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#111A2C] hover:bg-[#1A263D] border border-emerald-500/30 text-emerald-400 text-xs font-bold transition-all active:scale-95 shadow-sm"
-                      >
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>⚡ Test with Sample Notes (1-Click)</span>
-                      </button>
                     </div>
                   ) : (
                     /* STEP 1 & 2: INLINE WIZARD (OPTION B) */
